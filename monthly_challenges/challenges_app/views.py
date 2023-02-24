@@ -16,8 +16,9 @@ monthly_challenges = {
     "september": "Learn Django for at least 20 minutes every day!",
     "october": "Eat no meat for the entire month",
     "november": "Walk for atleast 20 minutes every day!",
-    "december": "Learn Django for at least 20 minutes every day!",
+    "december": None,
 }
+
 
 def monthly_challenge_number(request, month):
     month_keys = list(monthly_challenges.keys())
@@ -32,17 +33,18 @@ def monthly_challenge_number(request, month):
 def monthly_challenge(request, month):
     try:
         challenge_text = monthly_challenges[month]
-        return render(request, "challenges_app/challenge.html")
+        context = {
+            "month": month,
+            "text": challenge_text
+        }
+        return render(request, "challenges_app/challenge.html", context)
     except:
         return HttpResponseNotFound("<h1>This month is not supported!</h1>")
 
 def challenge_list(request):
-    list_items = ""
     month_keys = list(monthly_challenges.keys())
-    for month in month_keys:
-        capitalized_month = month.capitalize()
-        month_path = reverse("month_challenge", args=[month])
-        list_items += f"<li><a href=\"{month_path}\">{capitalized_month}</a></li>"
-
-    response_data = f"<ul>{list_items}</ul>"
-    return HttpResponse(response_data)
+    context = {
+        "months" : month_keys
+    }
+    return render(request, "challenges_app/index.html", context)
+    
