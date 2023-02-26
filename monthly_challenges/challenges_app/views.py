@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import Http404, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse
 # from django.template.loader import render_to_string
 # Create your views here.
@@ -8,8 +8,8 @@ monthly_challenges = {
     "january": "Eat no meat for the entire month",
     "february": "Walk for atleast 20 minutes every day!",
     "march": "Learn Django for at least 20 minutes every day!",
-    "april": "Eat no meat for the entire month",
     "may": "Walk for atleast 20 minutes every day!",
+    "april": "Eat no meat for the entire month",
     "june": "Learn Django for at least 20 minutes every day!",
     "july": "Eat no meat for the entire month",
     "august": "Walk for atleast 20 minutes every day!",
@@ -39,7 +39,7 @@ def monthly_challenge(request, month):
         }
         return render(request, "challenges_app/challenge.html", context)
     except:
-        return HttpResponseNotFound("<h1>This month is not supported!</h1>")
+        raise Http404()
 
 def challenge_list(request):
     month_keys = list(monthly_challenges.keys())
